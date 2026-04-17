@@ -9,7 +9,8 @@ Options:
     -n
         This program generally tries to setuid `nobody', unless this flag is
         set.  The setuid call will fail if this program is not run as root (in
-        which case, use this flag).
+        which case, use this flag). Ignored in Termux as no setuid done on this
+        platform.
 
     --version
     -V
@@ -781,7 +782,7 @@ class PureProxy(SMTPServer):
 
 
 class Options:
-    setuid = True
+    setuid = False
     classname = 'PureProxy'
     size_limit = None
     enable_SMTPUTF8 = False
