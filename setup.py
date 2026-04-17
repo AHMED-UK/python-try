@@ -1332,8 +1332,8 @@ class PyBuildExt(build_ext):
             sysconfig.get_config_var('POSIX_SEMAPHORES_NOT_ENABLED')
         ):
             multiprocessing_srcs.append('_multiprocessing/semaphore.c')
-        self.addext(Extension('_multiprocessing', multiprocessing_srcs))
-        self.addext(Extension('_posixshmem', ['_multiprocessing/posixshmem.c']))
+        self.addext(Extension('_multiprocessing', multiprocessing_srcs, libraries=["android-posix-semaphore"]))
+        self.addext(Extension('_posixshmem', ['_multiprocessing/posixshmem.c','_multiprocessing/posix-shm-extension.c']))
 
     def detect_uuid(self):
         # Build the _uuid module if possible

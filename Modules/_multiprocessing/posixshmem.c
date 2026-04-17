@@ -11,6 +11,9 @@ posixshmem - A Python extension that provides shm_open() and shm_unlink()
 #include <sys/mman.h>
 #endif
 
+int shm_open(const char *, int, mode_t);
+int shm_unlink(const char *);
+
 /*[clinic input]
 module _posixshmem
 [clinic start generated code]*/
