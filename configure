@@ -11040,7 +11040,7 @@ then
 		 then CCSHARED="-fPIC";
 		 else CCSHARED="+z";
 		 fi;;
-	Linux-android*) ;;
+	Linux-android*) CCSHARED="-fPIC";;
 	Linux*|GNU*) CCSHARED="-fPIC";;
 	Emscripten*|WASI*)
 		if test "x$enable_wasm_dynamic_linking" = xyes; then :
