@@ -307,8 +307,6 @@ class PyBuildExt(build_ext):
         self.failed_on_import = []
         self.missing = []
         self.disabled_configure = []
-        if '-j' in os.environ.get('MAKEFLAGS', ''):
-            self.parallel = True
 
     def add(self, ext):
         self.extensions.append(ext)
