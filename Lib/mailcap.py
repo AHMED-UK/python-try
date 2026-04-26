@@ -67,7 +67,8 @@ def listmailcapfiles():
             # Don't bother with getpwuid()
             home = '.' # Last resort
         mailcaps = [home + '/.mailcap', '/etc/mailcap',
-                '/usr/etc/mailcap', '/usr/local/etc/mailcap']
+                '/usr/etc/mailcap', '/usr/local/etc/mailcap',
+                '@TERMUX_PREFIX@/etc/mailcap']
     return mailcaps
 
 
