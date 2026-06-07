@@ -32,7 +32,7 @@
 #include <limits.h>    // NAME_MAX
 #include <unistd.h>    // unlink()
 
-#define SHM_PREFIX "@TERMUX_PREFIX@/tmp/shm."
+#define SHM_PREFIX "/data/data/com.termux/files/usr/tmp/shm."
 
 static __inline__ char *__strchrnul(const char *s, int c)
 {

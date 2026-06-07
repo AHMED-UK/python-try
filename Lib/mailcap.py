@@ -68,7 +68,7 @@ def listmailcapfiles():
             home = '.' # Last resort
         mailcaps = [home + '/.mailcap', '/etc/mailcap',
                 '/usr/etc/mailcap', '/usr/local/etc/mailcap',
-                '@TERMUX_PREFIX@/etc/mailcap']
+                '/data/data/com.termux/files/usr/etc/mailcap']
     return mailcaps
 
 

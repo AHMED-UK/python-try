@@ -212,7 +212,7 @@ elif os.name == "posix":
             expr = os.fsencode(expr)
 
             try:
-                proc = subprocess.Popen(('@TERMUX_PREFIX@/bin/ldconfig', '-r'),
+                proc = subprocess.Popen(('/data/data/com.termux/files/usr/bin/ldconfig', '-r'),
                                         stdout=subprocess.PIPE,
                                         stderr=subprocess.DEVNULL)
             except OSError:  # E.g. command not found

@@ -18,7 +18,7 @@ pardir = '..'
 extsep = '.'
 sep = '/'
 pathsep = ':'
-defpath = '@TERMUX_PREFIX@/bin'
+defpath = '/data/data/com.termux/files/usr/bin'
 altsep = None
 devnull = '/dev/null'
 

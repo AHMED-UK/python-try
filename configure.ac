@@ -562,6 +562,13 @@ then
 	ac_sys_release=
     else
 	ac_sys_system=`uname -s`
+	# Detect Android (Termux) before Linux classification
+	# uname -s returns Linux on Android, so refine using uname -o
+	case "`uname -o 2>/dev/null`" in
+	  Android*)
+	    ac_sys_system=Android
+	    ;;
+	esac
 	if test "$ac_sys_system" = "AIX" \
 	-o "$ac_sys_system" = "UnixWare" -o "$ac_sys_system" = "OpenUNIX"; then
 		ac_sys_release=`uname -v`
@@ -1479,6 +1486,16 @@ if test $enable_shared = "yes"; then
   PY_ENABLE_SHARED=1
   AC_DEFINE(Py_ENABLE_SHARED, 1, [Defined if Python is built as a shared library.])
   case $ac_sys_system in
+    Android*|Linux-android*)
+	  LDLIBRARY='libpython$(LDVERSION).so'
+	  BLDLIBRARY='-L. -lpython$(LDVERSION)'
+	  RUNSHARED=LD_LIBRARY_PATH=`pwd`${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+	  INSTSONAME="$LDLIBRARY".$SOVERSION
+	  if test "$with_pydebug" != yes
+          then
+	      PY3LIBRARY=libpython3.so
+	  fi
+	  ;;
     CYGWIN*)
           LDLIBRARY='libpython$(LDVERSION).dll.a'
           DLLLIBRARY='libpython$(LDVERSION).dll'
@@ -2203,7 +2220,7 @@ AC_DEFUN([PY_CHECK_CC_WARNING], [
 # tweak BASECFLAGS based on compiler and platform
 case $GCC in
 yes)
-    CFLAGS_NODIST="$CFLAGS_NODIST -std=c11"
+    CFLAGS_NODIST="$CFLAGS_NODIST -std=c17"
 
     PY_CHECK_CC_WARNING([enable], [extra], [if we can add -Wextra])
     AS_VAR_IF([ac_cv_enable_extra_warning], [yes],
@@ -3116,6 +3133,9 @@ then
 		BLDSHARED="Modules/ld_so_aix \$(CC) -bI:Modules/python.exp"
 		LDSHARED="\$(LIBPL)/ld_so_aix \$(CC) -bI:\$(LIBPL)/python.exp"
 		;;
+	Android*|Linux-android*)
+		LDSHARED='$(CC) -shared'
+		LDCXXSHARED='$(CXX) -shared';;
 	SunOS/5*)
 		if test "$GCC" = "yes" ; then
 			LDSHARED='$(CC) -shared'
@@ -3253,6 +3273,7 @@ AC_MSG_CHECKING(CCSHARED)
 if test -z "$CCSHARED"
 then
 	case $ac_sys_system/$ac_sys_release in
+	Android*|Linux-android*) CCSHARED="-fPIC";;
 	SunOS*) if test "$GCC" = yes;
 		then CCSHARED="-fPIC";
 		elif test `uname -p` = sparc;
@@ -3263,7 +3284,6 @@ then
 		 then CCSHARED="-fPIC";
 		 else CCSHARED="+z";
 		 fi;;
-	Linux-android*) ;;
 	Linux*|GNU*) CCSHARED="-fPIC";;
 	Emscripten*|WASI*)
 		AS_VAR_IF([enable_wasm_dynamic_linking], [yes], [
@@ -3296,7 +3316,7 @@ then
 	hp*|HP*)
 	    LINKFORSHARED="-Wl,-E -Wl,+s";;
 #	    LINKFORSHARED="-Wl,-E -Wl,+s -Wl,+b\$(BINLIBDEST)/lib-dynload";;
-	Linux-android*) LINKFORSHARED="-pie -Xlinker -export-dynamic";;
+	Android*|Linux-android*) LINKFORSHARED="-pie -Xlinker -export-dynamic";;
 	Linux*|GNU*) LINKFORSHARED="-Xlinker -export-dynamic";;
 	# -u libsys_s pulls in all symbols in libsys
 	Darwin/*)
